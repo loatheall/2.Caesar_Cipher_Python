@@ -1,35 +1,41 @@
-alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
+alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u',
+            'v', 'w', 'x', 'y', 'z']
 
-direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n ").lower()
-text = input("Type your message:\n ").lower()
-shift = int(input("Type the shift number:\n "))
+again = False
 
-def encrypt(original_text, shift_amount):
+
+# TODO-1: Combine the encrypt() and decrypt() into a single function 'caesar()'
+#  Use the value of the user chosen 'direction' variable to determine which functionality to use
+#  Call the caesar function instead of encrypt/decrypt and pass all 3 variables direction/text/shift
+def caesar(encode_or_decode, original_text, shift_amount):
     cipher_text = ""
 
-    for i in range(len(original_text)):
+    if encode_or_decode == "decode":
+        shift_amount *= -1
+    for char in original_text:
+        if char in alphabet:
+            number = alphabet.index(char)
+            index_after_shift = (number + shift_amount) % len(alphabet)
+            cipher_text += alphabet[index_after_shift]
+        else:
+            cipher_text += char
 
-        number = alphabet.index(original_text[i])
-        index_after_shift = number + shift_amount
+    print(f"Here is the {encode_or_decode}d result: {cipher_text}")
 
-        index_after_shift %= len(alphabet)
 
-        cipher_text += alphabet[index_after_shift]
-        print(f"Here is the encoded result: {cipher_text}")
 
-# TODO-1: Create a function called 'decrypt()' that takes 'original_text' and 'shift_amount' as 2 inputs
-def decrypt(original_text, shift_amount):
-    cipher_text = ""
+while not again:
+    direction = input("Type 'encode' to encrypt, type 'decode' to decrypt:\n ").lower()
+    if direction != "encode" and direction != "decode":
+        print("Invalid direction")
+        continue
+    text = input("Type your message:\n ").lower()
+    shift = int(input("Type the shift number:\n "))
 
-# TODO-2: Inside the 'decrypt()' function, shift each letter of the 'original_text' backwards in the alphabet
-#  by the 'shift_amount' and print the decrypted text
-    for i in range(len(original_text)):
+    caesar(encode_or_decode=direction, original_text=text, shift_amount=shift)
 
-        number = alphabet.index(original_text[i])
-        index_after_shift = number - shift_amount
+    choice = input("Do you want to continue? (y/n): ").lower()
 
-        index_after_shift %= len(alphabet)
-
-        cipher_text += alphabet[index_after_shift]
-    print(f"Here is the decoded result: {cipher_text}")
-decrypt(original_text=text, shift_amount=shift)
+    if choice == "n":
+        again = True
+        print("Thank you for playing!")
